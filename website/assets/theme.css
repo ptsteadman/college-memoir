@@ -1,0 +1,27 @@
+
+h1, h2 {
+  font-family: 'texgyrescholabold', serif;
+  text-align: center;
+}
+
+h1 {
+  color: darkred;
+}
+
+body {
+  width: 600px;
+  margin: auto;
+  padding-bottom: 60px;
+}
+
+img {
+  width: 600px;
+  margin: auto;
+}
+
+a {
+  margin: auto;
+  display: block;
+  text-align: center;
+  margin: 15px 0px;
+}
