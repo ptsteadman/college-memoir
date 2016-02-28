@@ -1,17 +1,33 @@
 
-h1, h2 {
-  font-family: 'texgyrescholabold', serif;
-  text-align: center;
+body {
+
 }
 
 h1 {
-  color: darkred;
+  font-family: 'texgyrescholabold', serif;
+  color: #B31B1B;
+  text-align: center;
+  font-weight: bold;
+  font-size: 3em;
 }
+
+p{
+  font-family: 'texgyrescholaregular', serif;
+  text-align: center;
+}
+
+h2 {
+  font-family: 'texgyrescholaregular', serif;
+  text-align: center;
+  font-weight: 300;
+}
+
 
 body {
   width: 600px;
   margin: auto;
   padding-bottom: 60px;
+  background-color: rgba(253,253,253,.96);
 }
 
 img {
@@ -19,9 +35,18 @@ img {
   margin: auto;
 }
 
-a {
+.actions a {
   margin: auto;
   display: block;
   text-align: center;
   margin: 15px 0px;
+  color: black;
+  padding: 15px 20px;
+  border: 2px solid #B91F1F;
+  text-decoration: none;
+  font-family: 'texgyrescholaregular', serif;
+}
+
+.acitons a:hover {
+  background-color: white;
 }
