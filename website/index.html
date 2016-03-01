@@ -21,7 +21,7 @@
         <br>
         <a href="https://github.com/ptsteadman/college-memoir/releases/download/0.4.1/college-memoir.pdf">Download PDF</a>
         <a href="https://github.com/ptsteadman/college-memoir">Clone Repository</a>
-        <a href="mailto:ptsteadman@gmail.com?subject=I Would Like To Purchase A Paper Copy Of 'College Memoir'">Puchase Booklet</a>
+        <a href="mailto:ptsteadman@gmail.com?subject=I Would Like To Purchase A Paper Copy Of 'College Memoir'">Purchase Booklet</a>
       </div>
       <br>
       <div class="credit">
@@ -45,7 +45,7 @@ var black = new Color(50, 50, 50);
 var grey = new Color(200, 200, 200);
 var white = new Color(255,255, 255);
 
-var o = 3.5;
+var o = 3.0;
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -63,21 +63,10 @@ var i = 0;
 var lastTimestamp;
 var start = 1;  // so that blocks start immediately
 var blocks = [];
-var scrolling = false;
 
 
-function addWaterBlock(y){
-  var point = Point(randomInt(-12,20), randomInt(y,20), randomInt(o, o));
-  var size = randomSize();
-  var block = Shape.Prism(point, size.w, size.l, size.h);
-  blocks[i = ++i % 80] = {
-    block: block,
-    dY: 0,
-    o: point.y
-  };
-}
+var scrolling = true;
 
-scrolling = true;
 setTimeout(function(){
   scrolling = false;
 }, 1000);
@@ -89,12 +78,27 @@ window.onscroll = function(){
   }, 1000);
 }
 
+function addWaterBlock(y){
+  var point = Point(randomInt(-12,20), randomInt(y,20), randomInt(o, o));
+  var size = randomSize();
+  var block = Shape.Prism(point, size.w, size.l, size.h);
+  blocks[i = ++i % 60] = {
+    block: block,
+    dY: 0,
+    o: point.y
+  };
+}
+
 function step(timestamp){
   if(!start) start = timestamp;
   if(!lastTimestamp) lastTimestamp = timestamp;
   var delta = timestamp - lastTimestamp;
   lastTimestamp = timestamp;
-  progress = timestamp - start;
+  var progress = timestamp - start;
+  if(progress > 2000 && scrolling == false){
+    window.requestAnimationFrame(step);
+    return;
+  }
 
   if(scrolling == true && progress > 20){
     // add new block
@@ -113,7 +117,7 @@ function step(timestamp){
     var progress =  Math.abs(b.dY) / 32;
 
     var c = (1/progress) * 155;
-    if(c <= 265){
+    if(c <= 257){
        c = (1/Math.abs(1 - progress)) * 155;
     }
     var color = new Color(0,0, c);
