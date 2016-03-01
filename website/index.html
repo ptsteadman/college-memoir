@@ -2,21 +2,157 @@
 <html>
   <head>
     <title>COLLEGE MEMOIR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A short novel about college, technology,
+    sexuality, and happiness.">
     <link rel="stylesheet" href="assets/font/texgyrescholabold.css">
     <link rel="stylesheet" href="assets/font/texgyrescholaregular.css">
     <link rel="stylesheet" href="assets/theme.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
   </head>
   <body>
-    <h1>College Memoir</h1>
-    <h2>A Novella</h2>
+    <div class="container">
+      <br>
+      <h1>College Memoir</h1>
+      <h2>A Short Novel</h2>
+      <br>
+      <canvas id="canvas" width="1400" height="1400"></canvas>
+      <div class="actions">
+        <br>
+        <a href="https://github.com/ptsteadman/college-memoir/releases/download/0.4.1/college-memoir.pdf">Download PDF</a>
+        <a href="https://github.com/ptsteadman/college-memoir">Clone Repository</a>
+        <a href="mailto:ptsteadman@gmail.com?subject=I Would Like To Purchase A Paper Copy Of 'College Memoir'">Puchase Booklet</a>
+      </div>
+      <br>
+      <div class="credit">
+        By <a href="https://ptsteadman.com">Patrick Steadman</a>, 2016
+      </div>
+    </div>
+<script src="http://jdan.github.io/isomer/js/isomer.min.js"></script>
+<script>
 
-    <div class="actions">
-      <a href="https://github.com/ptsteadman/college-memoir/releases/download/0.4.1/college-memoir.pdf">Download PDF</a>
-      <a href="https://github.com/ptsteadman/college-memoir">Clone Repository</a>
-      <a href="mailto:ptsteadman@gmail.com?subject=I Would Like To Purchase A Paper Copy Of 'College Memoir'">Puchase Booklet</a>
-    </div>
-    <div class="credit">
-      By <a href="https://ptsteadman.com">Patrick Steadman</a>
-    </div>
+document.addEventListener("DOMContentLoaded", function(){
+var Point  = Isomer.Point;
+var Path   = Isomer.Path;
+var Shape  = Isomer.Shape;
+var Vector = Isomer.Vector;
+var Color  = Isomer.Color;
+
+var iso = new Isomer(document.getElementById("canvas"));
+
+var red = new Color(179, 27, 27);
+var black = new Color(50, 50, 50);
+var grey = new Color(200, 200, 200);
+var white = new Color(255,255, 255);
+
+var o = 3.5;
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomSize() {
+  return {
+    w: randomInt(1,2),
+    l: randomInt(2,4),
+    h: 0
+  };
+}
+
+var i = 0;
+var lastTimestamp;
+var start = 1;  // so that blocks start immediately
+var blocks = [];
+var scrolling = false;
+
+
+function addWaterBlock(y){
+  var point = Point(randomInt(-12,20), randomInt(y,20), randomInt(o, o));
+  var size = randomSize();
+  var block = Shape.Prism(point, size.w, size.l, size.h);
+  blocks[i = ++i % 80] = {
+    block: block,
+    dY: 0,
+    o: point.y
+  };
+}
+
+scrolling = true;
+setTimeout(function(){
+  scrolling = false;
+}, 1000);
+
+window.onscroll = function(){
+  scrolling = true;
+  setTimeout(function(){
+    scrolling = false;
+  }, 1000);
+}
+
+function step(timestamp){
+  if(!start) start = timestamp;
+  if(!lastTimestamp) lastTimestamp = timestamp;
+  var delta = timestamp - lastTimestamp;
+  lastTimestamp = timestamp;
+  progress = timestamp - start;
+
+  if(scrolling == true && progress > 20){
+    // add new block
+    start = null;
+    addWaterBlock(20);
+  }
+
+  // add background over old blocks
+  iso.add(Shape.Prism(new Point(0, 0, -10), 40, 40, 1), white);
+
+  // move water
+  blocks.forEach(function(b){
+    b.dY -= 0.017 * delta;
+    var y = b.o + b.dY;
+
+    var progress =  Math.abs(b.dY) / 32;
+
+    var c = (1/progress) * 155;
+    if(c <= 265){
+       c = (1/Math.abs(1 - progress)) * 155;
+    }
+    var color = new Color(0,0, c);
+    iso.add(b.block.translate(0, b.dY, 0), color);
+  });
+
+
+  // redraw oar
+  iso.add(Shape.Prism(Point(0,0,o), 10, 6, 1), grey)
+
+  iso.add(Shape.extrude(new Path([
+          Point(11, 4, o),
+          Point(11, 7, o),
+          Point(7, 7, o)
+  ]), 0.24), red);
+
+  iso.add(Shape.extrude(new Path([
+          Point(11, 1, o),
+          Point(11, 4, o),
+          Point(7, 1, o)
+  ]), 0.24), red);
+
+  iso.add(Shape.Prism(Point(0, 5, o), -20, 1, 1), black);
+
+  window.requestAnimationFrame(step);
+}
+
+window.requestAnimationFrame(step);
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56783175-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
   </body>
 </html>
